@@ -32,23 +32,23 @@
 
 #pragma mark - PBFCommonWebviewDelgate
 //是否可以加载网页
-- (BOOL)callback_webViewShouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(NSInteger)navigationType{
+- (BOOL)callback_webView:(PBFCommonWebview*)webView shouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(NSInteger)navigationType{
     NSLog(@"callback_webViewShouldStartLoadWithRequest");
     return YES;
 }
 
 //加载网页开始
-- (void)callback_webViewDidStartLoad{
+- (void)callback_webViewDidStartLoad:(PBFCommonWebview*)webView{
     NSLog(@"callback_webViewDidStartLoad");
 }
 
 //加载网页成功
-- (void)callback_webViewDidFinishLoad{
+- (void)callback_webViewDidFinishLoad:(PBFCommonWebview*)webView{
     NSLog(@"callback_webViewDidFinishLoad");
 }
 
 //加载网页失败
-- (void)callback_webViewDidFailLoadWithError:(NSError*)error{
+- (void)callback_webView:(PBFCommonWebview*)webView didFailLoadWithError:(NSError*)error{
     NSLog(@"callback_webViewDidFailLoadWithError:");
 }
 
