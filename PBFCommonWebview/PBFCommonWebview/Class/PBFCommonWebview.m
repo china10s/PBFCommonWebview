@@ -12,6 +12,7 @@
 
 @interface PBFCommonWebview()
 @property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) NSURLRequest* currentRequest;
 @end
 
 @implementation PBFCommonWebview
@@ -34,6 +35,7 @@
 - (void)loadRequest:(NSURLRequest *)request{
     if ([self.realWebView respondsToSelector:@selector(loadRequest:)]) {
         [self.realWebView performSelector:@selector(loadRequest:) withObject:request];
+        self.currentRequest = request;
     }
 }
 
@@ -93,13 +95,13 @@
 }
 
 - (BOOL)loading{
-    if([self.realWebView respondsToSelector:@selector(loading)]){
-        return [self.realWebView performSelector:@selector(loading)];
+    if([self.realWebView respondsToSelector:@selector(isLoading)]){
+        return [self.realWebView performSelector:@selector(isLoading)];
     }
     return FALSE;
 }
 
-- (void)stringByEvaluatingJavaScriptFromString:(NSString *)script  completionHandler:(void (^ _Nullable)(_Nullable id, NSError * _Nullable error))completionHandler{
+- (void)stringByEvaluatingJavaScriptFromString:(NSString *)script completionHandler:(PBFCommonWebviewJSExecuteBlock)completionHandler{
     if(WEB_VIEW_CONTROLLER_USING_WEBKIT){
         if([self.realWebView respondsToSelector:@selector(evaluateJavaScript:completionHandler:)]){
             [self.realWebView evaluateJavaScript:script completionHandler:^(id _Nullable data, NSError * _Nullable error) {
@@ -130,6 +132,14 @@
     }
 }
 
+- (BOOL)hidden{
+    return [self.realWebView hidden];
+}
+
+- (void)setHidden:(BOOL)hidden{
+    [self.realWebView setHidden:hidden];
+}
+
 - (UIScrollView*)scrollView{
     if ([self.realWebView respondsToSelector:@selector(scrollView)]) {
         return [self.realWebView scrollView];
@@ -139,12 +149,21 @@
     }
 }
 
+- (NSURLRequest*)currentRequest
+{
+    if (WEB_VIEW_CONTROLLER_USING_WEBKIT) {
+        return _currentRequest;
+    }
+    else {
+        return [(UIWebView*)self.realWebView request];;
+    }
+}
 
-#pragma mark - UIWebViewDelegate
+#pragma mark - protect method
 //是否可以加载网页
 - (BOOL)inner_webViewShouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(NSInteger)navigationType{
-    if([(NSObject*)self.delegateSelf respondsToSelector:@selector(callback_webViewShouldStartLoadWithRequest:navigationType:)]){
-        return [self.delegateSelf callback_webViewShouldStartLoadWithRequest:request navigationType:navigationType];
+    if([(NSObject*)self.delegateSelf respondsToSelector:@selector(callback_webView:shouldStartLoadWithRequest:navigationType:)]){
+        return [self.delegateSelf callback_webView:self shouldStartLoadWithRequest:request navigationType:navigationType];
     }
     else{
         return NO;
@@ -153,22 +172,22 @@
 
 //加载网页开始
 - (void)inner_webViewDidStartLoad{
-    if([(NSObject*)self.delegateSelf respondsToSelector:@selector(callback_webViewDidStartLoad)]){
-        return [self.delegateSelf callback_webViewDidStartLoad];
+    if([(NSObject*)self.delegateSelf respondsToSelector:@selector(callback_webViewDidStartLoad:)]){
+        return [self.delegateSelf callback_webViewDidStartLoad:self];
     }
 }
 
 //加载网页成功
 - (void)inner_webViewDidFinishLoad{
-    if([(NSObject*)self.delegateSelf respondsToSelector:@selector(callback_webViewDidFinishLoad)]){
-        return [self.delegateSelf callback_webViewDidFinishLoad];
+    if([(NSObject*)self.delegateSelf respondsToSelector:@selector(callback_webViewDidFinishLoad:)]){
+        return [self.delegateSelf callback_webViewDidFinishLoad:self];
     }
 }
 
 //加载网页失败
 - (void)inner_webViewDidFailLoadWithError:(NSError*)error{
-    if([(NSObject*)self.delegateSelf respondsToSelector:@selector(callback_webViewDidFailLoadWithError:)]){
-        return [self.delegateSelf callback_webViewDidFailLoadWithError:error];
+    if([(NSObject*)self.delegateSelf respondsToSelector:@selector(callback_webView:didFailLoadWithError:)]){
+        return [self.delegateSelf callback_webView:self didFailLoadWithError:error];
     }
 }
 

@@ -18,4 +18,7 @@
         ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.9999)
 #endif
 
+//JS回调函数
+typedef void (^PBFCommonWebviewJSExecuteBlock)(_Nullable id, NSError * _Nullable);
+
 #endif /* PBFCommonWebviewHeader_h */

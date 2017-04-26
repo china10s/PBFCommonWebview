@@ -9,19 +9,19 @@
 #import <UIKit/UIKit.h>
 #import "PBFCommonWebviewHeader.h"
 
-@class PBFCommonWebviewConfiguration;
+@class PBFCommonWebviewConfiguration,PBFCommonWebview;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol PBFCommonWebviewDelgate
 //是否可以加载网页
-- (BOOL)callback_webViewShouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(NSInteger)navigationType;
+- (BOOL)callback_webView:(PBFCommonWebview*)webView shouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(NSInteger)navigationType;
 //加载网页开始
-- (void)callback_webViewDidStartLoad;
+- (void)callback_webViewDidStartLoad:(PBFCommonWebview*)webView ;
 //加载网页成功
-- (void)callback_webViewDidFinishLoad;
+- (void)callback_webViewDidFinishLoad:(PBFCommonWebview*)webView;
 //加载网页失败
-- (void)callback_webViewDidFailLoadWithError:(NSError*)error;
+- (void)callback_webView:(PBFCommonWebview*)webView didFailLoadWithError:(NSError*)error;
 @end
 
 @interface PBFCommonWebview : NSObject
@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)loadHTMLString:(NSString *)string baseURL:(nullable NSURL *)baseURL;
 - (void)loadData:( NSData *)data MIMEType:(NSString *)MIMEType textEncodingName:(NSString *)textEncodingName baseURL:(nullable NSURL *)baseURL;
 
-@property (nullable, nonatomic, readonly, strong) NSURLRequest *request;
+//@property (nullable, nonatomic, readonly, strong) NSURLRequest *request;
 
 - (void)reload;
 - (void)stopLoading;
@@ -49,9 +49,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, getter=canGoBack) BOOL canGoBack;
 @property (nonatomic, readonly, getter=canGoForward) BOOL canGoForward;
 @property (nonatomic, readonly, getter=isLoading) BOOL loading;
+@property (nonatomic, readonly,strong) NSURLRequest* currentRequest;
 
-- (void)stringByEvaluatingJavaScriptFromString:(NSString *)script  completionHandler:(void (^ _Nullable)(_Nullable id, NSError * _Nullable error))completionHandler;
 
+- (void)stringByEvaluatingJavaScriptFromString:(NSString *)script completionHandler:(void (^ _Nullable)(_Nullable id, NSError * _Nullable error))completionHandler;
+
+@property (nonatomic) BOOL hidden;
 @property (nonatomic) BOOL scalesPageToFit;
 
 @property (nonatomic, readonly, strong) UIScrollView *scrollView;

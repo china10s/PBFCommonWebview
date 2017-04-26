@@ -7,7 +7,9 @@
 //
 
 #import "PBFCommonWebview+WKWebView.h"
-
+@interface PBFCommonWebview()
+@property (nonatomic, strong) NSURLRequest* currentRequest;
+@end
 
 @implementation PBFCommonWebview (WKWebView)
 - (void)initWebView_WKWebView:(CGRect)frame configuration:(PBFCommonWebviewConfiguration *)configuration{
@@ -28,6 +30,7 @@
     BOOL resultBOOL = [self inner_webViewShouldStartLoadWithRequest:navigationAction.request navigationType:navigationAction.navigationType];
     BOOL isLoadingDisableScheme = [self isLoadingWKWebViewDisableScheme:navigationAction.request.URL];
     if(resultBOOL && !isLoadingDisableScheme){
+        self.currentRequest = navigationAction.request;
         if (navigationAction.targetFrame == nil){
             [webView loadRequest:navigationAction.request];
         }
