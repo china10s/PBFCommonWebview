@@ -7,8 +7,19 @@
 //
 
 #import "PBFCommonWebview+WKWebView.h"
+
 @interface PBFCommonWebview()
 @property (nonatomic, strong) NSURLRequest* currentRequest;
+#pragma mark - private method
+//////基类基础函数
+//是否可以加载网页
+- (BOOL)inner_webViewShouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(NSInteger)navigationType;
+//加载网页开始
+- (void)inner_webViewDidStartLoad;
+//加载网页成功
+- (void)inner_webViewDidFinishLoad;
+//加载网页失败
+- (void)inner_webViewDidFailLoadWithError:(NSError*)error;
 @end
 
 @implementation PBFCommonWebview (WKWebView)
