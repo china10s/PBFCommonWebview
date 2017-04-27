@@ -35,6 +35,18 @@
     }
 }
 
+//- (BOOL)canGoBack_UIWebview{
+//    return [self.realWebView canGoBack];
+//}
+//
+//- (BOOL)canGoForward_UIWebview{
+//    
+//}
+//
+//- (BOOL)isLoading_UIWebview{
+//    
+//}
+
 #pragma mark - UIWebViewDelegate
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
     BOOL resultBOOL = [self inner_webViewShouldStartLoadWithRequest:request navigationType:navigationType];

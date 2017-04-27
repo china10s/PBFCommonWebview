@@ -13,6 +13,8 @@
 @interface PBFCommonWebview()
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) NSURLRequest* currentRequest;
+@property (nonatomic, copy) NSString* userAgent;
+@property (nonatomic, copy) NSString* title;
 @end
 
 @implementation PBFCommonWebview
@@ -82,23 +84,31 @@
 
 - (BOOL)canGoBack{
     if([self.realWebView respondsToSelector:@selector(canGoBack)]){
-        return [self.realWebView performSelector:@selector(canGoBack)];
+        return [self.realWebView canGoBack];
     }
     return FALSE;
 }
 
 - (BOOL)canGoForward{
     if([self.realWebView respondsToSelector:@selector(canGoForward)]){
-        return [self.realWebView performSelector:@selector(canGoForward)];
+        return [self.realWebView canGoForward];
     }
     return FALSE;
 }
 
 - (BOOL)loading{
     if([self.realWebView respondsToSelector:@selector(isLoading)]){
-        return [self.realWebView performSelector:@selector(isLoading)];
+        return [self.realWebView isLoading];
     }
     return FALSE;
+}
+
+- (NSString *)webTitle{
+    if (WEB_VIEW_CONTROLLER_USING_WEBKIT) {
+        return [((WKWebView*)self.realWebView) title];
+    }else{
+        return [((UIWebView*)self.realWebView) stringByEvaluatingJavaScriptFromString:@"document.title"];
+    }
 }
 
 - (void)stringByEvaluatingJavaScriptFromString:(NSString *)script completionHandler:(PBFCommonWebviewJSExecuteBlock)completionHandler{

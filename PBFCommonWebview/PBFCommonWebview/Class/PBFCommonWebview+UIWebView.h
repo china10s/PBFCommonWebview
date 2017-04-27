@@ -11,5 +11,8 @@
 @class PBFCommonWebviewConfiguration;
 
 @interface PBFCommonWebview (UIWebView)<UIWebViewDelegate>
+//- (BOOL)canGoBack_UIWebview;
+//- (BOOL)canGoForward_UIWebview;
+//- (BOOL)isLoading_UIWebview;
 - (void)initWebView_UIWebView:(CGRect)frame configuration:(PBFCommonWebviewConfiguration *)configuration;
 @end

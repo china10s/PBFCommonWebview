@@ -26,19 +26,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PBFCommonWebview : NSObject
 //初始化
-- (instancetype)initWithFrame:(CGRect)frame andController:(UIViewController*)controller configuration:(nullable PBFCommonWebviewConfiguration *)configuration;
+- (instancetype)initWithFrame:(CGRect)frame andController:(nullable UIViewController*)controller configuration:(nullable PBFCommonWebviewConfiguration *)configuration;
 
 @property (nonatomic,strong)id realWebView;
 @property (nonatomic,weak)UIViewController *parentCtrl;
 @property (nonatomic,weak)id<PBFCommonWebviewDelgate> delegateSelf;
+//@property (nonatomic,copy,readonly) NSString *webTitle;
 
 #pragma mark - public method
 //////公共函数
 - (void)loadRequest:(NSURLRequest *)request;
 - (void)loadHTMLString:(NSString *)string baseURL:(nullable NSURL *)baseURL;
 - (void)loadData:( NSData *)data MIMEType:(NSString *)MIMEType textEncodingName:(NSString *)textEncodingName baseURL:(nullable NSURL *)baseURL;
-
-//@property (nullable, nonatomic, readonly, strong) NSURLRequest *request;
 
 - (void)reload;
 - (void)stopLoading;
@@ -49,7 +48,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, getter=canGoBack) BOOL canGoBack;
 @property (nonatomic, readonly, getter=canGoForward) BOOL canGoForward;
 @property (nonatomic, readonly, getter=isLoading) BOOL loading;
-@property (nonatomic, readonly,strong) NSURLRequest* currentRequest;
+@property (nonatomic, readonly,copy) NSURLRequest* currentRequest;
+@property (nonatomic, readonly,copy) NSString* webTitle;
 
 
 - (void)stringByEvaluatingJavaScriptFromString:(NSString *)script completionHandler:(void (^ _Nullable)(_Nullable id, NSError * _Nullable error))completionHandler;
